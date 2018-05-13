@@ -36,8 +36,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     dispatch,
     getLists: (quantity) => dispatch(getLists(quantity)),
-    moveCard: (lastX, nextX) => dispatch(moveCard(lastX, nextX)),
-    moveList: (lastX, lastY, nextX, nextY) => dispatch(moveList(lastX, lastY, nextX, nextY)),
+    moveCard: (lastX, lastY, nextX, nextY) => dispatch(moveCard(lastX, lastY, nextX, nextY)),
+    moveList: (lastX, nextX) => dispatch(moveList(lastX, nextX)),
   }
 }
 
@@ -169,24 +169,26 @@ export default class TrelloView extends React.Component {
     const { lists } = this.props;
     console.log("props", this.props)
     return (
-      <Row>
-        <Col xs={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }}>
-          <CustomDragLayer snapToGrid={false} />
-          { lists && lists.map((item, i) =>
-            <CardsContainer
-              key={item.id}
-              id={item.id}
-              item={item}
-              moveCard={this.moveCard}
-              moveList={this.moveList}
-              startScrolling={this.startScrolling}
-              stopScrolling={this.stopScrolling}
-              isScrolling={this.state.isScrolling}
-              x={i}
-            />
-          )}
-        </Col>
-      </Row>
+      <main>
+        <Row>
+          <Col xs={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }}>
+            <CustomDragLayer snapToGrid={false} />
+            { lists && lists.map((item, i) =>
+              <CardsContainer
+                key={item.id}
+                id={item.id}
+                item={item}
+                moveCard={this.moveCard}
+                moveList={this.moveList}
+                startScrolling={this.startScrolling}
+                stopScrolling={this.stopScrolling}
+                isScrolling={this.state.isScrolling}
+                x={i}
+              />
+            )}
+          </Col>
+        </Row>
+      </main>
     )
   }
 }

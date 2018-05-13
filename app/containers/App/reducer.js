@@ -45,17 +45,21 @@ const initialState = {
 function appReducer(state = initialState, action) {
   switch (action.type) {
     case LOAD_REPOS:
-      return update(state, {
-        loading: { $set: true },
-        error: { $set: false },
-        userData: { repositories: { $set: false } },
-      });
+      return { ...state,
+        loading: true,
+        error: false,
+        userData: {
+          repositories: false,
+        }
+      };
     case LOAD_REPOS_SUCCESS:
-      return update(state, {
-        loading: { $set: false },
-        currentUser: { $set: action.username },
-        userData: { repositories: { $set: action.repos } },
-      });
+      return { ...state,
+        loading: false,
+        currentUser: action.username,
+        userData: {
+          repositories: action.repos,
+        }
+      };    
     case LOAD_REPOS_ERROR:
       return { ...state, loading: false, error: action.error };
     case SAVE_USER_ANSWERS:
