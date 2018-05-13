@@ -50,7 +50,10 @@ const makeSelectRepos = () => createSelector(
   selectGlobal,
   (globalState) => globalState.userData.repositories
 );
-
+const makeSelectLists = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.lists,
+);
 export {
   makeGlobalState,
   selectGlobal,
@@ -61,4 +64,5 @@ export {
   makeSelectLoading,
   makeSelectError,
   makeSelectRepos,
+  makeSelectLists,
 };

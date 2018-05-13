@@ -67,7 +67,22 @@ export default class TrelloView extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({lists: this.props.lists})
     // this.fetch();
+  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if(this.props.lists !== nextProps.lists) {
+  //     this.setState({lists: nextProps.lists})
+  //     return true
+  //   }
+  // }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.lists != this.state.lists) {
+      this.setState({lists: nextProps.lists})
+    }
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+
   }
   handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...this.state.pagination };

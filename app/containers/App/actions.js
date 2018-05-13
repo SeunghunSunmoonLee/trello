@@ -28,6 +28,8 @@ import {
   MOVE_CARD,
   MOVE_LIST,
   TOGGLE_DRAGGING,
+  GET_COMMENTS,
+  GET_COMMENTS_SUCCESS,
 } from './constants';
 
 /**
@@ -118,5 +120,17 @@ export function toggleDragging(isDragging) {
   return {
     type: TOGGLE_DRAGGING,
     isDragging,
+  };
+}
+export function getComments(postId) {
+  return {
+    type: GET_COMMENTS,
+    postId,
+  };
+}
+export function getCommentsSuccess(lists) {
+  return {
+    type: GET_COMMENTS_SUCCESS,
+    lists,
   };
 }

@@ -24,6 +24,8 @@ import {
   MOVE_CARD,
   MOVE_LIST,
   TOGGLE_DRAGGING,
+  GET_COMMENTS,
+  GET_COMMENTS_SUCCESS,
 } from './constants';
 
 // The initial state of the App
@@ -119,6 +121,15 @@ function appReducer(state = initialState, action) {
         isDragging: action.isDragging,
       };
     }
+    case GET_COMMENTS:
+      return { ...state,
+        isFetching: true,
+      };
+    case GET_COMMENTS_SUCCESS:
+      return { ...state,
+        isFetching: false,
+        lists: action.lists,
+      };
     default:
       return state;
   }
