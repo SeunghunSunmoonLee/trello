@@ -106,8 +106,9 @@ export default class Cards extends Component {
   }
 
   render() {
-    const { connectDropTarget, x, cards, isOver, canDrop } = this.props;
+    const { connectDropTarget, x, cards, isOver, canDrop, listName } = this.props;
     const { placeholderIndex } = this.state;
+    console.log("listName", listName)
 
     let isPlaceHold = false;
     let cardList = [];
@@ -124,6 +125,7 @@ export default class Cards extends Component {
         cardList.push(
           <Card x={x} y={i}
             item={item}
+            listName='posts'
             key={item.id}
             stopScrolling={this.props.stopScrolling}
           />

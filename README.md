@@ -16,7 +16,7 @@ or
 ```
 npm start
 ```
-
+Double click post card and comment list will show up 
 ## References
 This project uses awesome @react-boilerplate  [react-boilerplate](https://github.com/react-boilerplate/react-boilerplate)
 
