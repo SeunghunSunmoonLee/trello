@@ -4,8 +4,8 @@
 
  import { delay } from 'redux-saga'
 import { call, take, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
-import { LOAD_REPOS, GET_LISTS, GET_LISTS_SUCCESS, GET_COMMENTS, GET_COMMENTS_SUCCESS } from 'containers/App/constants';
-import { reposLoaded, repoLoadingError, getListsSuccess, getCommentsSuccess } from 'containers/App/actions';
+import { LOAD_REPOS, GET_LISTS, GET_LISTS_SUCCESS, GET_COMMENTS, GET_COMMENTS_SUCCESS, SEARCH_LISTS } from 'containers/App/constants';
+import { reposLoaded, repoLoadingError, getListsSuccess, getCommentsSuccess, searchListsSuccess } from 'containers/App/actions';
 import faker from 'faker';
 import axios from 'axios';
 import request from 'utils/request';
@@ -54,6 +54,17 @@ export function* getComments(action) {
       console.log(error);
     });
     yield put(getCommentsSuccess(lists));
+}
+export function* searchLists(action) {
+  let comments = []
+  const lists = yield select(makeSelectLists())
+  const resultCards = lists[0].cards.filter(card => card.title.toLowerCase().includes(action.value.toLowerCase()))
+  lists.splice(0, 1, {
+    id: 0,
+    name: 'posts',
+    cards: resultCards
+  })
+  yield put(searchListsSuccess(lists));
 }
 export function* getListsWorkerSaga(action) {
   let lists = [];
@@ -112,5 +123,6 @@ export default function* watcherSaga() {
   // It will be cancelled automatically on component unmount
   yield takeLatest(GET_LISTS, getListsWorkerSaga);
   yield takeLatest(GET_COMMENTS, getComments);
+  yield takeLatest(SEARCH_LISTS, searchLists)
   yield takeLatest(LOAD_REPOS, getRepos);
 }

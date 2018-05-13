@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { DropTarget, DragSource } from 'react-dnd';
-
+import { Input } from 'antd';
+const Search = Input.Search;
 import Cards from './Cards';
+import { connect } from 'react-redux';
+import {searchLists} from 'containers/App/actions';
 
 const listSource = {
   beginDrag(props) {
@@ -42,6 +45,21 @@ const listTarget = {
   }
 };
 
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    lists: state.global.lists,
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    dispatch,
+    searchLists: (value) => dispatch(searchLists(value)),
+  }
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
 @DropTarget('list', listTarget, connectDragSource => ({
   connectDropTarget: connectDragSource.dropTarget(),
 }))
@@ -64,7 +82,7 @@ export default class CardsContainer extends Component {
   }
 
   render() {
-    const { connectDropTarget, connectDragSource, item, x, moveCard, isDragging } = this.props;
+    const { connectDropTarget, connectDragSource, item, x, moveCard, isDragging, searchLists } = this.props;
     const opacity = isDragging ? 0.5 : 1;
 
     return connectDragSource(connectDropTarget(
@@ -72,6 +90,12 @@ export default class CardsContainer extends Component {
         <div className="desk-head">
           <div className="desk-name">{item.name}</div>
         </div>
+        <Search
+          placeholder="input search text"
+          onSearch={value => searchLists(value)}
+          enterButton
+          style={{width: '243px', margin: '0 0 10px 15px' }}
+        />
         <Cards
           moveCard={moveCard}
           x={x}

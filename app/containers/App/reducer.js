@@ -26,6 +26,8 @@ import {
   TOGGLE_DRAGGING,
   GET_COMMENTS,
   GET_COMMENTS_SUCCESS,
+  SEARCH_LISTS,
+  SEARCH_LISTS_SUCCESS,
 } from './constants';
 
 // The initial state of the App
@@ -42,6 +44,7 @@ const initialState = {
   coinData: [],
   isFetching: false,
   lists: [],
+  originalLists: [],
   isDragging: false
 };
 function appReducer(state = initialState, action) {
@@ -84,6 +87,7 @@ function appReducer(state = initialState, action) {
       return { ...state,
         isFetching: false,
         lists: action.lists,
+        originalLists: action.lists,
       };
     case MOVE_CARD: {
       const newLists = [...state.lists];
@@ -126,6 +130,15 @@ function appReducer(state = initialState, action) {
         isFetching: true,
       };
     case GET_COMMENTS_SUCCESS:
+      return { ...state,
+        isFetching: false,
+        lists: action.lists,
+      };
+    case SEARCH_LISTS:
+      return { ...state,
+        isFetching: true,
+      };
+    case SEARCH_LISTS_SUCCESS:
       return { ...state,
         isFetching: false,
         lists: action.lists,

@@ -52,7 +52,7 @@ const makeSelectRepos = () => createSelector(
 );
 const makeSelectLists = () => createSelector(
   selectGlobal,
-  (globalState) => globalState.lists,
+  (globalState) => globalState.originalLists,
 );
 export {
   makeGlobalState,
