@@ -10,7 +10,7 @@
  *   return state.set('yourStateVariable', true);
  */
 
-import update from 'immutability-helper';
+// import update from 'immutability-helper';
 
 import {
   LOAD_REPOS_SUCCESS,
@@ -59,7 +59,7 @@ function appReducer(state = initialState, action) {
         userData: {
           repositories: action.repos,
         }
-      };    
+      };
     case LOAD_REPOS_ERROR:
       return { ...state, loading: false, error: action.error };
     case SAVE_USER_ANSWERS:
@@ -87,6 +87,12 @@ function appReducer(state = initialState, action) {
       const newLists = [...state.lists];
       const { lastX, lastY, nextX, nextY } = action;
       if (lastX === nextX) {
+        // lastY 2 4
+        // nextY 4 2
+        // newLists[lastX].cards =
+        //   lastY < nextY ?
+        //   newLists[lastX].cards.slice(0, lastY)
+        //   .concat(newLists[lastX].cards.slice(lastY, )) ...newLists[lastX].cards.slice(nextY)
         newLists[lastX].cards.splice(nextY, 0, newLists[lastX].cards.splice(lastY, 1)[0]);
       } else {
         // move element to new place

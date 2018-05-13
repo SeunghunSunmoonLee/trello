@@ -20,8 +20,8 @@ export default function configureStore(initialState = {}, history) {
   ];
 
   if (process.env.NODE_ENV !== 'production') {
-    const freeze = require('redux-freeze'); // eslint-disable-line global-require
-    middlewares.push(freeze);
+    // const freeze = require('redux-freeze'); // eslint-disable-line global-require
+    // middlewares.push(freeze);
   }
 
   const enhancers = [
