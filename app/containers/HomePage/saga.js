@@ -39,24 +39,20 @@ export function* getComments(action) {
       }
     })
     .then((response) => {
-      console.log(response)
       comments = response.data.length > 10 ? response.data.slice(0,10) : response.data.slice()
       // lists[0] = {id: 0, name: 'posts', cards: posts}
       // lists[1] = {id: 1, name: 'comments', cards: comments.filter(comment => comment.postId === post.id)}
       comments = comments.filter(comment => comment.postId === action.postId)
-      console.log("getComments comments, lists", comments, lists)
       lists.splice(1, 1, {
         id: 1,
         name: 'comments',
         cards: comments
       })
-      console.log("getComments result lists", lists)
 
     })
     .catch(function (error) {
       console.log(error);
     });
-    console.log("getComments result lists", lists)
     yield put(getCommentsSuccess(lists));
 }
 export function* getListsWorkerSaga(action) {
@@ -66,18 +62,23 @@ export function* getListsWorkerSaga(action) {
       }
     })
     .then((response) => {
-      console.log(response)
       lists.push({
         id: 0,
         name: 'posts',
         cards: response.data.slice(0,10)
       })
-      // lists[0] = {id: 0, name: 'posts', cards: posts}
-      // lists[1] = {id: 1, name: 'comments', cards: comments.filter(comment => comment.postId === post.id)}
+      /**
+       *     // lists[0] = {id: 0, name: 'posts', cards: posts}
+       *     // lists[1] = {id: 1, name: 'comments', cards: comments.filter(comment => comment.postId === post.id)}
+       */
+
     })
     .catch(function (error) {
       console.log(error);
     });
+    /**
+     *  Data Model
+     */
   // let count = 0;
   // for (let i = 0; i < action.quantity; i++) {
   //   const cards = [];
@@ -98,7 +99,6 @@ export function* getListsWorkerSaga(action) {
   //   });
   // }
   yield call(delay, 500);
-  // console.log("lists",lists)
   yield put(getListsSuccess(lists));
 }
 

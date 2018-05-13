@@ -182,7 +182,6 @@ export default class TrelloView extends React.Component {
   }
   render() {
     const { lists } = this.props;
-    console.log("props", this.props)
     return (
       <main>
         <Row>
