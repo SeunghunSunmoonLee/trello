@@ -55,7 +55,6 @@ export default class TrelloView extends React.Component {
       filteredInfo: null,
       sortedInfo: null,
     }
-    props.getLists(10);
     this.moveCard = this.moveCard.bind(this);
     this.moveList = this.moveList.bind(this);
     this.findList = this.findList.bind(this);
@@ -67,6 +66,7 @@ export default class TrelloView extends React.Component {
   }
 
   componentDidMount() {
+    this.props.getLists(10);
     this.setState({lists: this.props.lists})
     // this.fetch();
   }

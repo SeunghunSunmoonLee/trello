@@ -33,7 +33,7 @@ export function* getRepos() {
  */
 export function* getComments(action) {
   let comments = []
-  const lists = yield select(makeSelectLists())
+  const lists = yield select(state => state.global.originalLists)
   axios.get('https://jsonplaceholder.typicode.com/comments', {
       params: {
       }
@@ -57,7 +57,14 @@ export function* getComments(action) {
 }
 export function* searchLists(action) {
   let comments = []
-  const lists = yield select(makeSelectLists())
+  /**
+   * you are grabbing the reference to some nested object in your state and
+   * then you are mutating its content so it gets updated in state too, so when
+   * you grab it again on the second run of startSomething you are geting mutated
+   * result and you will probably just push to it again so those MORE will just pile up in your state.
+   * I would suggest to const [...features] = yield select(selectFeatures)
+   */
+  const [...lists] = yield select(state => state.global.originalLists)
   const resultCards = lists[0].cards.filter(card => card.title.toLowerCase().includes(action.value.toLowerCase()))
   lists.splice(0, 1, {
     id: 0,
@@ -68,7 +75,7 @@ export function* searchLists(action) {
 }
 export function* getListsWorkerSaga(action) {
   let lists = [];
-  axios.get('https://jsonplaceholder.typicode.com/posts', {
+  yield axios.get('https://jsonplaceholder.typicode.com/posts', {
       params: {
       }
     })
@@ -109,7 +116,6 @@ export function* getListsWorkerSaga(action) {
   //     cards
   //   });
   // }
-  yield call(delay, 500);
   yield put(getListsSuccess(lists));
 }
 
