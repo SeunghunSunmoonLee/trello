@@ -4,8 +4,8 @@
 
  import { delay } from 'redux-saga'
 import { call, take, put, select, takeLatest, takeEvery } from 'redux-saga/effects';
-import { LOAD_REPOS, GET_LISTS, GET_LISTS_SUCCESS, GET_COMMENTS, GET_COMMENTS_SUCCESS, SEARCH_LISTS } from 'containers/App/constants';
-import { reposLoaded, repoLoadingError, getListsSuccess, getCommentsSuccess, searchListsSuccess } from 'containers/App/actions';
+import { LOAD_REPOS, GET_LISTS, GET_LISTS_SUCCESS, GET_COMMENTS, GET_COMMENTS_SUCCESS, DELETE_COMMENTS, SEARCH_LISTS } from 'containers/App/constants';
+import { reposLoaded, repoLoadingError, getListsSuccess, getCommentsSuccess, deleteCommentsSuccess, searchListsSuccess } from 'containers/App/actions';
 import faker from 'faker';
 import axios from 'axios';
 import request from 'utils/request';
@@ -29,12 +29,12 @@ export function* getRepos() {
   }
 }
 /**
- * Drag and Drop handler
+ * Comments handler
  */
 export function* getComments(action) {
   let comments = []
-  const lists = yield select(state => state.global.originalLists)
-  axios.get('https://jsonplaceholder.typicode.com/comments', {
+  const [...lists] = yield select(state => state.global.lists)
+  yield axios.get('https://jsonplaceholder.typicode.com/comments', {
       params: {
       }
     })
@@ -43,18 +43,26 @@ export function* getComments(action) {
       // lists[0] = {id: 0, name: 'posts', cards: posts}
       // lists[1] = {id: 1, name: 'comments', cards: comments.filter(comment => comment.postId === post.id)}
       comments = comments.filter(comment => comment.postId === action.postId)
-      lists.splice(1, 1, {
-        id: 1,
-        name: 'comments',
-        cards: comments
-      })
-
+      if(!lists.find(list=>list.id ===action.postId)) {
+        lists.push({
+          id: action.postId,
+          name: `Comments of Post ${action.postId}`,
+          cards: comments
+        })
+      }
     })
     .catch(function (error) {
       console.log(error);
     });
     yield put(getCommentsSuccess(lists));
 }
+export function* deleteComments(action) {
+  let comments = []
+  const [...lists] = yield select(state => state.global.lists)
+  yield lists.splice(lists.findIndex(item => item.id === action.postId), 1)
+  yield put(deleteCommentsSuccess(lists));
+}
+
 export function* searchLists(action) {
   let comments = []
   /**
@@ -68,7 +76,7 @@ export function* searchLists(action) {
   const resultCards = lists[0].cards.filter(card => card.title.toLowerCase().includes(action.value.toLowerCase()))
   lists.splice(0, 1, {
     id: 0,
-    name: 'posts',
+    name: 'Posts',
     cards: resultCards
   })
   yield put(searchListsSuccess(lists));
@@ -82,7 +90,7 @@ export function* getListsWorkerSaga(action) {
     .then((response) => {
       lists.push({
         id: 0,
-        name: 'posts',
+        name: 'Posts',
         cards: response.data.slice(0,10)
       })
       /**
@@ -129,6 +137,7 @@ export default function* watcherSaga() {
   // It will be cancelled automatically on component unmount
   yield takeLatest(GET_LISTS, getListsWorkerSaga);
   yield takeLatest(GET_COMMENTS, getComments);
+  yield takeLatest(DELETE_COMMENTS, deleteComments);
   yield takeLatest(SEARCH_LISTS, searchLists)
   yield takeLatest(LOAD_REPOS, getRepos);
 }

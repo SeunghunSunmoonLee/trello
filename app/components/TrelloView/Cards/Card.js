@@ -38,8 +38,13 @@ export default class Card extends React.Component {
       <div style={style} onClick={() => getComments(item.id)} className="item" id={style ? item.id : null}>
         <div className="item-container">
           <div className="item-content">
-            <div className="item-author">{item.title ? `${item.title}` : item.name}</div>
-            <p>{item.body}</p>
+            <div
+              className="item-author"
+              style={{textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap'}}
+            >
+              {item.title ? `${item.title}` : item.name}
+            </div>
+            <p style={{textOverflow: 'ellipsis', overflow: 'hidden'}}>{item.body}</p>
           </div>
         </div>
       </div>

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { DropTarget, DragSource } from 'react-dnd';
-import { Input } from 'antd';
+import { Form, Input, Icon } from 'antd';
 const Search = Input.Search;
+const FormItem = Form.Item;
+
 import Cards from './Cards';
 import { connect } from 'react-redux';
-import {searchLists} from 'containers/App/actions';
+import {searchLists, deleteComments} from 'containers/App/actions';
 
 const listSource = {
   beginDrag(props) {
@@ -56,6 +58,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     dispatch,
     searchLists: (value) => dispatch(searchLists(value)),
+    deleteComments: (value) => dispatch(deleteComments(value)),
   }
 }
 
@@ -82,20 +85,38 @@ export default class CardsContainer extends Component {
   }
 
   render() {
-    const { connectDropTarget, connectDragSource, item, x, moveCard, isDragging, searchLists } = this.props;
+    const { connectDropTarget, connectDragSource, item, x, moveCard, isDragging, searchLists, deleteComments } = this.props;
+    const {
+      getFieldDecorator,
+      getFieldsError,
+      setFieldsValue,
+      getFieldsValue,
+    } = this.props.form
     const opacity = isDragging ? 0.5 : 1;
-
     return connectDragSource(connectDropTarget(
       <div className="desk" style={{ opacity }}>
-        <div className="desk-head">
-          <div className="desk-name">{item.name}</div>
+        <div className="desk-head" style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div className="desk-name" style={{fontSize: '20px', margin: '10px auto 0 8px' }}>{item.name}</div>
+          {item.id !== 0 &&
+            <Icon onClick={() => deleteComments(item.id)} style={{fontSize: '20px',  margin: '10px auto 0 8px', cursor: 'pointer'}} type="delete"/>
+          }
         </div>
-        <Search
-          placeholder="input search text"
-          onSearch={value => searchLists(value)}
-          enterButton
-          style={{width: '243px', margin: '0 0 10px 15px' }}
-        />
+        <Form layout="inline" onSubmit={this.handleSubmit}>
+          <FormItem>
+            {getFieldDecorator('search', {
+              initialValue: '',
+              rules: [{ required: false, }],
+            })(
+              <Search
+                placeholder="input search text"
+                onSearch={value => searchLists(value)}
+                onChange={() => searchLists(getFieldsValue().search)}
+                enterButton
+                style={{width: '243px', margin: '0 0 10px 15px' }}
+              />
+            )}
+          </FormItem>
+        </Form>
         <Cards
           moveCard={moveCard}
           x={x}
@@ -109,3 +130,12 @@ export default class CardsContainer extends Component {
     ));
   }
 }
+CardsContainer = Form.create()(CardsContainer)
+// class SearchInputForm extends React.Component {
+//   render() {
+//
+//     return (
+//
+//     )
+//   }
+// }

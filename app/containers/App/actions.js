@@ -32,6 +32,8 @@ import {
   GET_COMMENTS_SUCCESS,
   SEARCH_LISTS,
   SEARCH_LISTS_SUCCESS,
+  DELETE_COMMENTS,
+  DELETE_COMMENTS_SUCCESS,
 } from './constants';
 
 /**
@@ -133,6 +135,18 @@ export function getComments(postId) {
 export function getCommentsSuccess(lists) {
   return {
     type: GET_COMMENTS_SUCCESS,
+    lists,
+  };
+}
+export function deleteComments(postId) {
+  return {
+    type: DELETE_COMMENTS,
+    postId,
+  };
+}
+export function deleteCommentsSuccess(lists) {
+  return {
+    type: DELETE_COMMENTS_SUCCESS,
     lists,
   };
 }

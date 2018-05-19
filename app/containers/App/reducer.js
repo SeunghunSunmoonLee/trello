@@ -28,6 +28,8 @@ import {
   GET_COMMENTS_SUCCESS,
   SEARCH_LISTS,
   SEARCH_LISTS_SUCCESS,
+  DELETE_COMMENTS,
+  DELETE_COMMENTS_SUCCESS,
 } from './constants';
 
 // The initial state of the App
@@ -130,6 +132,15 @@ function appReducer(state = initialState, action) {
         isFetching: true,
       };
     case GET_COMMENTS_SUCCESS:
+      return { ...state,
+        isFetching: false,
+        lists: action.lists,
+      };
+    case DELETE_COMMENTS:
+      return { ...state,
+        isFetching: true,
+      };
+    case DELETE_COMMENTS_SUCCESS:
       return { ...state,
         isFetching: false,
         lists: action.lists,
