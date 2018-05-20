@@ -101,22 +101,24 @@ export default class CardsContainer extends Component {
             <Icon onClick={() => deleteComments(item.id)} style={{fontSize: '20px',  margin: '10px auto 0 8px', cursor: 'pointer'}} type="delete"/>
           }
         </div>
-        <Form layout="inline" onSubmit={this.handleSubmit}>
-          <FormItem>
-            {getFieldDecorator('search', {
-              initialValue: '',
-              rules: [{ required: false, }],
-            })(
-              <Search
-                placeholder="input search text"
-                onSearch={value => searchLists(value)}
-                onChange={() => searchLists(getFieldsValue().search)}
-                enterButton
-                style={{width: '243px', margin: '0 0 10px 15px' }}
-              />
-            )}
-          </FormItem>
-        </Form>
+        { item.id === 0 &&
+          <Form layout="inline" onSubmit={this.handleSubmit}>
+            <FormItem>
+              {getFieldDecorator('search', {
+                initialValue: '',
+                rules: [{ required: false, }],
+              })(
+                <Search
+                  placeholder="input search text"
+                  onSearch={value => searchLists(value)}
+                  onChange={() => searchLists(getFieldsValue().search)}
+                  enterButton
+                  style={{width: '243px', margin: '0 0 10px 15px' }}
+                />
+              )}
+            </FormItem>
+          </Form>
+        }
         <Cards
           moveCard={moveCard}
           x={x}

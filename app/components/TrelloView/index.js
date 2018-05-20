@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux';
 
@@ -66,7 +66,10 @@ export default class TrelloView extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getLists(10);
+    console.log("initial lists", this.props.lists)
+    if(this.props.lists.length === 0) {
+      this.props.getLists(10);
+    }
     this.setState({lists: this.props.lists})
     // this.fetch();
   }
@@ -184,8 +187,6 @@ export default class TrelloView extends React.Component {
     const { lists } = this.props;
     return (
       <main>
-        <Row>
-          <Col xs={{ span: 24, offset: 0 }} lg={{ span: 24, offset: 0 }}>
             <CustomDragLayer snapToGrid={false} />
             { lists && lists.map((item, i) =>
               <CardsContainer
@@ -200,8 +201,6 @@ export default class TrelloView extends React.Component {
                 x={i}
               />
             )}
-          </Col>
-        </Row>
       </main>
     )
   }

@@ -49,6 +49,9 @@ import { translationMessages } from './i18n';
 // Import CSS reset and Global Styles
 import './global-styles';
 
+// localStorage state import
+import { PersistGate } from 'redux-persist/integration/react'
+
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
 const openSansObserver = new FontFaceObserver('Open Sans', {});
@@ -63,17 +66,19 @@ openSansObserver.load().then(() => {
 // Create redux store with history
 const initialState = {};
 const history = createHistory();
-export const store = configureStore(initialState, history);
+export const {store, persistor} = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
-
 const render = (messages) => {
+console.log("persistor", persistor, persistor.getState())
   ReactDOM.render(
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
-      </LanguageProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <LanguageProvider messages={messages}>
+          <ConnectedRouter history={history}>
+            <App />
+          </ConnectedRouter>
+        </LanguageProvider>
+      </PersistGate>
     </Provider>,
     MOUNT_NODE
   );

@@ -46,7 +46,8 @@ body {
 .desk-items {
 	overflow-y: auto;
 	height: 100%;
-	padding-bottom: 20px;
+  /* height: calc(100vh - 280px); */
+	padding-bottom: 80px;
 }
 
 .desk-items .placeholder,

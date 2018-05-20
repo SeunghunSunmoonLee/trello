@@ -8,6 +8,9 @@ import createSagaMiddleware from 'redux-saga';
 
 import createReducer from './reducers';
 
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web and AsyncStorage for react-native
+
 const sagaMiddleware = createSagaMiddleware();
 
 export default function configureStore(initialState = {}, history) {
@@ -42,11 +45,19 @@ export default function configureStore(initialState = {}, history) {
       : compose;
   /* eslint-enable */
 
+  const persistConfig = {
+    key: 'root',
+    storage,
+  }
+
+  const persistedReducer = persistReducer(persistConfig, createReducer())
+
   const store = createStore(
-    createReducer(),
+    persistedReducer, // this line used to use createReducer() method
     initialState,
     composeEnhancers(...enhancers)
   );
+  let persistor = persistStore(store)
 
   // Extensions
   store.runSaga = sagaMiddleware.run;
@@ -57,9 +68,8 @@ export default function configureStore(initialState = {}, history) {
   /* istanbul ignore next */
   if (module.hot) {
     module.hot.accept('./reducers', () => {
-      store.replaceReducer(createReducer(store.injectedReducers));
+      store.replaceReducer(persistReducer(persistConfig, createReducer(store.injectedReducers)) );
     });
   }
-
-  return store;
+  return {store, persistor};
 }

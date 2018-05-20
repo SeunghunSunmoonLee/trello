@@ -26,8 +26,6 @@ import Footer from 'components/Footer';
 //   flex-direction: column;
 // `;
 const AppWrapper = styled.div`
-  max-width: 100%;
-  min-height: 100%;
 `;
 export default function App() {
   return (
